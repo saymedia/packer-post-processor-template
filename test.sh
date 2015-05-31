@@ -40,10 +40,10 @@ fi
 
 
 # Run
-# PACKER_LOG=1 TMPDIR=~/tmp $GOPATH/bin/packer build docker_test.json
-# if [[ $? != 0 ]]; then
-#     exit 1
-# fi
+PACKER_LOG=1 TMPDIR=~/tmp $GOPATH/bin/packer build docker_test.json
+if [[ $? != 0 ]]; then
+    exit 1
+fi
 
 PACKER_LOG=1 TMPDIR=~/tmp $GOPATH/bin/packer build amazon_test.json
 if [[ $? != 0 ]]; then

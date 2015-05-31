@@ -19,7 +19,7 @@
     "post-processors": [
         [
             {
-                "type": "terraform",
+                "type": "template",
                 "template_file": "docker_test.tfvars",
                 "output_file": "docker_test_out.tfvars",
                 "keep_input_artifact": true

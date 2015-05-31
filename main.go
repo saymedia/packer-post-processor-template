@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/mitchellh/packer/packer/plugin"
-	"github.com/saymedia/packer-post-processor-terraform/terraform"
+	"github.com/saymedia/packer-post-processor-template/template"
 )
 
 func main() {
@@ -10,6 +10,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	server.RegisterPostProcessor(new(terraform.PostProcessor))
+	server.RegisterPostProcessor(new(template.PostProcessor))
 	server.Serve()
 }
