@@ -1,0 +1,5 @@
+/packer
+crash.log
+packer-post-processor-json-updater
+packer-post-processor-terraform
+*_test_out.tfvars

@@ -1,0 +1,48 @@
+{
+    "variables": {
+        "AWS_ACCESS_KEY": "{{ env `AWS_ACCESS_KEY` }}",
+        "AWS_SECRET_KEY": "{{ env `AWS_SECRET_KEY` }}"
+    },
+    "builders": [
+        {
+            "type":             "amazon-ebs",
+            "vpc_id":           "vpc-2421dd41",
+            "subnet_id":        "subnet-69848e2f",
+            "security_group_ids":["sg-6e52f80b"],
+            "ami_name":         "Base Ubuntu {{timestamp}}",
+            "ami_description":  "Base Ubuntu image with Chef and Consul Agent installed",
+
+            "access_key":       "{{user `AWS_ACCESS_KEY`}}",
+            "secret_key":       "{{user `AWS_SECRET_KEY`}}",
+
+            "region":           "us-west-1",
+            "instance_type":    "t2.micro",
+            "source_ami":       "ami-cf7d998b",
+            "ssh_username":     "ubuntu",
+            "associate_public_ip_address": true,
+            "ssh_timeout" :     "1m",
+            "run_tags": {
+                "Name": "base-ubuntu build"
+            }
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "echo foo",
+                "touch /tmp/test"
+            ]
+        }
+    ],
+    "post-processors": [
+        [
+            {
+                "type": "terraform",
+                "template_file": "amazon_test.tfvars",
+                "output_file": "amazon_test_out.tfvars",
+                "keep_input_artifact": true
+            }
+        ]
+    ]
+}

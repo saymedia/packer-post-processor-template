@@ -1,0 +1,29 @@
+{
+    "builders": [
+        {
+            "type": "docker",
+            "name": "base-ubuntu-docker",
+            "image": "ubuntu:latest",
+            "pull": false,
+            "commit": false
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "echo foo"
+            ]
+        }
+    ],
+    "post-processors": [
+        [
+            {
+                "type": "terraform",
+                "template_file": "docker_test.tfvars",
+                "output_file": "docker_test_out.tfvars",
+                "keep_input_artifact": true
+            }
+        ]
+    ]
+}
