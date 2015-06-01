@@ -1,6 +1,12 @@
 #!/bin/bash
 
 
+# Cleanup
+rm -f *_test_out.tfvars
+rm -f crash.log
+rm -f packer-post-processor-template
+
+
 # Testing
 go test ./...
 if [[ $? != 0 ]]; then
@@ -40,12 +46,12 @@ fi
 
 
 # Run
-PACKER_LOG=1 TMPDIR=~/tmp $GOPATH/bin/packer build docker_test.json
+PACKER_LOG=1 TMPDIR=~/tmp $GOPATH/bin/packer build amazon_test.json
 if [[ $? != 0 ]]; then
     exit 1
 fi
 
-PACKER_LOG=1 TMPDIR=~/tmp $GOPATH/bin/packer build amazon_test.json
+PACKER_LOG=1 TMPDIR=~/tmp $GOPATH/bin/packer build docker_test.json
 if [[ $? != 0 ]]; then
     exit 1
 fi
