@@ -7,6 +7,10 @@ rm -f crash.log
 rm -f packer-post-processor-template
 
 
+# Install deps
+go get
+
+
 # Testing
 go test ./...
 if [[ $? != 0 ]]; then
@@ -46,7 +50,7 @@ fi
 
 
 # Run
-PACKER_LOG=1 TMPDIR=~/tmp $GOPATH/bin/packer build amazon_test.json
+PACKER_LOG=1 $GOPATH/bin/packer build -var-file=amazon_test_variables.json amazon_test.json
 if [[ $? != 0 ]]; then
     exit 1
 fi

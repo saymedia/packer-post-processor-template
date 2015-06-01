@@ -1,5 +1,5 @@
 /packer
 crash.log
-packer-post-processor-json-updater
 packer-post-processor-template
 *_test_out.tfvars
+amazon_test_variables.json

@@ -1,6 +1,6 @@
-{{$arr := Split .Artifact.Id ":"}}
+{{$arr := split .Artifact.Id ":"}}
 variable "images" {
     default = {
-        {{index $arr 0}} = {{index $arr 1}}
+        {{index $arr 0}} = "{{index $arr 1}}"
     }
 }

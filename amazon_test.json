@@ -6,18 +6,18 @@
     "builders": [
         {
             "type":             "amazon-ebs",
-            "vpc_id":           "vpc-2421dd41",
-            "subnet_id":        "subnet-69848e2f",
-            "security_group_ids":["sg-6e52f80b"],
+            "vpc_id":           "{{user `AWS_VPC_ID`}}",
+            "subnet_id":        "{{user `AWS_SUBNET_ID`}}",
+            "security_group_ids":["{{user `AWS_SG_ID`}}"],
             "ami_name":         "Base Ubuntu {{timestamp}}",
-            "ami_description":  "Base Ubuntu image with Chef and Consul Agent installed",
+            "ami_description":  "Base Ubuntu image",
 
             "access_key":       "{{user `AWS_ACCESS_KEY`}}",
             "secret_key":       "{{user `AWS_SECRET_KEY`}}",
 
-            "region":           "us-west-1",
+            "region":           "{{user `AWS_REGION`}}",
             "instance_type":    "t2.micro",
-            "source_ami":       "ami-cf7d998b",
+            "source_ami":       "{{user `AWS_AMI_ID`}}",
             "ssh_username":     "ubuntu",
             "associate_public_ip_address": true,
             "ssh_timeout" :     "1m",
