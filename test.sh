@@ -2,7 +2,7 @@
 
 
 # Cleanup
-rm -f *_test_out.tfvars
+rm -f *_test_out*.tfvars
 rm -f crash.log
 rm -f packer-post-processor-template
 

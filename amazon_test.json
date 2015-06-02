@@ -9,8 +9,8 @@
             "vpc_id":           "{{user `AWS_VPC_ID`}}",
             "subnet_id":        "{{user `AWS_SUBNET_ID`}}",
             "security_group_ids":["{{user `AWS_SG_ID`}}"],
-            "ami_name":         "Base Ubuntu {{timestamp}}",
-            "ami_description":  "Base Ubuntu image",
+            "ami_name":         "Test Ubuntu {{timestamp}}",
+            "ami_description":  "Test Ubuntu Image",
 
             "access_key":       "{{user `AWS_ACCESS_KEY`}}",
             "secret_key":       "{{user `AWS_SECRET_KEY`}}",
@@ -22,7 +22,8 @@
             "associate_public_ip_address": true,
             "ssh_timeout" :     "1m",
             "run_tags": {
-                "Name": "base-ubuntu build"
+                "Name": "base-ubuntu build",
+                "Base": "base-ubuntu"
             }
         }
     ],

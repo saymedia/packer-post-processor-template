@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"text/template"
 
@@ -61,6 +62,7 @@ func (p *PostProcessor) Configure(raws ...interface{}) error {
 		return err
 	}
 
+	// apply default, var not required
 	if p.config.OutputFile == "" {
 		p.config.OutputFile = "out.tfvars"
 	}
@@ -89,52 +91,14 @@ func (p *PostProcessor) PostProcess(ui packer.Ui, artifact packer.Artifact) (pac
 	tmpl := p.config.TemplateFile
 	output := p.config.OutputFile
 
-	// ui.Message(fmt.Sprintf("Creating artifact: %s", artifact))
+	ui.Message(fmt.Sprintf("Creating artifact: %s", artifact))
 	log.Printf("[DEBUG] Creating artifact: %+v\n", artifact)
-	log.Printf("[DEBUG] Creating artifact: %+v\n", artifact.BuilderId())
-	log.Printf("[DEBUG] Creating artifact: %+v\n", artifact.Id())
-	log.Printf("[DEBUG] Creating artifact: %+v\n", artifact.String())
-
-	if artifact.BuilderId() == "amazon-ebs" {
-		// log.Printf("[DEBUG] Artifact.BuilderId: %+v\n", artifact.BuilderId)
-		// log.Printf("[DEBUG] Artifact.Amis: %+v\n", artifact.Amis)
-		// log.Printf("[DEBUG] Artifact.Amis[\"us-west-1\"]: %+v\n", artifact.Amis["us-west-1"])
-		// log.Printf("[DEBUG] Artifact.BuilderIdValue: %+v\n", artifact.BuilderIdValue)
-	}
 
 	renderErr := p.renderTemplate(tmpl, artifact, output)
 	if renderErr != nil { // could not render template
 		return nil, false, renderErr
 	}
-	log.Printf("[DEBUG] Template file: %s\n", output)
 	return artifact, false, nil
-
-	// // Write our Vagrantfile
-	// var customVagrantfile string
-	// if config.VagrantfileTemplate != "" {
-	//     ui.Message(fmt.Sprintf("Using custom Vagrantfile: %s", config.VagrantfileTemplate))
-	//     customBytes, err := ioutil.ReadFile(config.VagrantfileTemplate)
-	//     if err != nil {
-	//         return nil, false, err
-	//     }
-
-	//     customVagrantfile = string(customBytes)
-	// }
-
-	// f, err := os.Create(filepath.Join(dir, "Vagrantfile"))
-	// if err != nil {
-	//     return nil, false, err
-	// }
-
-	// t := template.Must(template.New("root").Parse(boxVagrantfileContents))
-	// err = t.Execute(f, &vagrantfileTemplate{
-	//     ProviderVagrantfile: vagrantfile,
-	//     CustomVagrantfile:   customVagrantfile,
-	// })
-	// f.Close()
-	// if err != nil {
-	//     return nil, false, err
-	// }
 }
 
 func (p *PostProcessor) renderTemplate(inputFile string, artifact packer.Artifact, outputFile string) (_err error) {
@@ -145,6 +109,22 @@ func (p *PostProcessor) renderTemplate(inputFile string, artifact packer.Artifac
 	}
 	templateStr := string(buf)
 
+	// Create a new file if already exists
+	origFile := outputFile
+	err = nil
+	for i := 2; i < 100; i = i + 1 {
+		outputFile = strings.Replace(origFile, ".", "_"+strconv.Itoa(i)+".", 1)
+		log.Printf("[DEBUG] Output file exists. Trying %s", outputFile)
+		if i >= 100 {
+			log.Printf("[DEBUG] Too many files exist. Giving up after %s", outputFile)
+		}
+		_, err = os.Stat(outputFile)
+		if err != nil {
+			break
+		}
+	}
+
+	log.Printf("[DEBUG] Template file: %s\n", outputFile)
 	f, err := os.Create(outputFile)
 	if err != nil { // could not render template
 		return err
@@ -154,20 +134,6 @@ func (p *PostProcessor) renderTemplate(inputFile string, artifact packer.Artifac
 	t, err := template.New("tmpl").Funcs(template.FuncMap{
 		"join":  strings.Join,
 		"split": strings.Split,
-		"splitA": func(s string) string {
-			out := strings.Split(s, ":")
-			if len(out) > 0 {
-				return out[0]
-			}
-			return ""
-		},
-		"splitB": func(s string) string {
-			out := strings.Split(s, ":")
-			if len(out) > 1 {
-				return out[1]
-			}
-			return ""
-		},
 	}).Parse(templateStr)
 	if err != nil {
 		return err
