@@ -26,6 +26,13 @@
                 "Base": "base-ubuntu",
                 "Builder": "packer"
             }
+        },
+        {
+            "type": "docker",
+            "name": "base-ubuntu-docker",
+            "image": "ubuntu:latest",
+            "pull": false,
+            "commit": false
         }
     ],
     "provisioners": [
@@ -42,7 +49,7 @@
             {
                 "type": "template",
                 "template_file": "amazon_test.tfvars",
-                "output_file": "amazon_test_out.tfvars",
+                "output_file": "multi_test_out.tfvars",
                 "keep_input_artifact": true
             }
         ]

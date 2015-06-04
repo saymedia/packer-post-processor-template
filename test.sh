@@ -50,6 +50,11 @@ fi
 
 
 # Run
+PACKER_LOG=1 $GOPATH/bin/packer build -var-file=amazon_test_variables.json multi_test.json
+if [[ $? != 0 ]]; then
+    exit 1
+fi
+
 PACKER_LOG=1 $GOPATH/bin/packer build -var-file=amazon_test_variables.json amazon_test.json
 if [[ $? != 0 ]]; then
     exit 1
