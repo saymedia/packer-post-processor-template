@@ -113,15 +113,17 @@ func (p *PostProcessor) renderTemplate(inputFile string, artifact packer.Artifac
 	origFile := outputFile
 	err = nil
 	for i := 2; i < 100; i = i + 1 {
-		outputFile = strings.Replace(origFile, ".", "_"+strconv.Itoa(i)+".", 1)
-		log.Printf("[DEBUG] Output file exists. Trying %s", outputFile)
 		if i >= 100 {
+			// this is not the same 100 as the line above due to the loop
 			log.Printf("[DEBUG] Too many files exist. Giving up after %s", outputFile)
+			break
 		}
 		_, err = os.Stat(outputFile)
 		if err != nil {
 			break
 		}
+		log.Printf("[DEBUG] Output file exists. Trying %s", outputFile)
+		outputFile = strings.Replace(origFile, ".", "_"+strconv.Itoa(i)+".", 1)
 	}
 
 	log.Printf("[DEBUG] Template file: %s\n", outputFile)
