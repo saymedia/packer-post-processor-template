@@ -3,3 +3,4 @@ crash.log
 packer-post-processor-template
 *_test_out*.tfvars
 amazon_test_variables.json
+/dist
