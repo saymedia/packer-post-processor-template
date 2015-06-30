@@ -23,7 +23,7 @@ before_install:
   - go get golang.org/x/tools/cmd/cover
 
 script:
-  - go test -v -covermode=count -coverprofile=coverage.out ./packer2terraform/...
+  - go test -v -covermode=count -coverprofile=coverage.out ./template/...
   - goveralls -coverprofile=coverage.out -service travis-ci -repotoken $COVERALLS_TOKEN
 
 after_success:
