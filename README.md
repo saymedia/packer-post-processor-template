@@ -3,7 +3,7 @@ Packer Template post-processor
 
 Create templated files for post-process images. For example, a Terraform config file that includes the built AMIs.
 
-[![travis build status for packer-post-processor-template](https://travis-ci.org/saymedia/packer-post-processor-template.svg)](https://travis-ci.org/saymedia/packer-post-processor-template)
+[![travis build status for packer-post-processor-template](https://travis-ci.org/saymedia/packer-post-processor-template.svg)](https://travis-ci.org/saymedia/packer-post-processor-template) [![Coverage Status](https://coveralls.io/repos/saymedia/packer-post-processor-template/badge.svg)](https://coveralls.io/r/saymedia/packer-post-processor-template)
 
 Usage
 -----
